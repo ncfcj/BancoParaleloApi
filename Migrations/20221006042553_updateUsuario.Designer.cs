@@ -4,6 +4,7 @@ using BancoParaleloAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BancoParaleloAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221006042553_updateUsuario")]
+    partial class updateUsuario
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,32 +23,6 @@ namespace BancoParaleloAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("BancoParaleloAPI.Entidades.Cidade", b =>
-                {
-                    b.Property<long>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("id"), 1L, 1);
-
-                    b.Property<long>("IBGE")
-                        .HasColumnType("bigint")
-                        .HasColumnName("ibge");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("nome");
-
-                    b.Property<long>("UF")
-                        .HasColumnType("bigint")
-                        .HasColumnName("uf");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Cidades");
-                });
 
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Endereco", b =>
                 {
@@ -83,74 +59,6 @@ namespace BancoParaleloAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Enderecos");
-                });
-
-            modelBuilder.Entity("BancoParaleloAPI.Entidades.Estado", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<string>("DDD")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("ddd");
-
-                    b.Property<int>("IBGE")
-                        .HasColumnType("int")
-                        .HasColumnName("ibge");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("nome");
-
-                    b.Property<int>("Pais")
-                        .HasColumnType("int")
-                        .HasColumnName("pais");
-
-                    b.Property<string>("UF")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("uf");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Estados");
-                });
-
-            modelBuilder.Entity("BancoParaleloAPI.Entidades.Pais", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"), 1L, 1);
-
-                    b.Property<int>("Bacen")
-                        .HasColumnType("int")
-                        .HasColumnName("bacen");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("nome");
-
-                    b.Property<string>("NomeEmPortugues")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("nome_pt");
-
-                    b.Property<string>("Sigla")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("sigla");
-
-                    b.HasKey("id");
-
-                    b.ToTable("Paises");
                 });
 
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Transacao", b =>
