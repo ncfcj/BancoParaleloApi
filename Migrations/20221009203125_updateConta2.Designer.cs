@@ -4,6 +4,7 @@ using BancoParaleloAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BancoParaleloAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221009203125_updateConta2")]
+    partial class updateConta2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,25 +23,6 @@ namespace BancoParaleloAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("BancoParaleloAPI.Entidades.Agencia", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<string>("Codigo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Agencias");
-                });
 
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Cidade", b =>
                 {
@@ -65,40 +48,6 @@ namespace BancoParaleloAPI.Migrations
                     b.HasKey("id");
 
                     b.ToTable("Cidades");
-                });
-
-            modelBuilder.Entity("BancoParaleloAPI.Entidades.Conta", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<long?>("AgenciaId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Codigo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal?>("Saldo")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<long?>("TipoId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("UsuarioId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AgenciaId");
-
-                    b.HasIndex("TipoId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Contas");
                 });
 
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Endereco", b =>
@@ -206,22 +155,6 @@ namespace BancoParaleloAPI.Migrations
                     b.ToTable("Paises");
                 });
 
-            modelBuilder.Entity("BancoParaleloAPI.Entidades.TipoDeConta", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<string>("Tipo")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TiposDeConta");
-                });
-
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Transacao", b =>
                 {
                     b.Property<long>("Id")
@@ -281,27 +214,6 @@ namespace BancoParaleloAPI.Migrations
                     b.HasIndex("EnderecoId");
 
                     b.ToTable("Usuarios");
-                });
-
-            modelBuilder.Entity("BancoParaleloAPI.Entidades.Conta", b =>
-                {
-                    b.HasOne("BancoParaleloAPI.Entidades.Agencia", "Agencia")
-                        .WithMany()
-                        .HasForeignKey("AgenciaId");
-
-                    b.HasOne("BancoParaleloAPI.Entidades.TipoDeConta", "Tipo")
-                        .WithMany()
-                        .HasForeignKey("TipoId");
-
-                    b.HasOne("BancoParaleloAPI.Entidades.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId");
-
-                    b.Navigation("Agencia");
-
-                    b.Navigation("Tipo");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Usuario", b =>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Data.SqlTypes;
 using System.Text.Json.Serialization;
 
 namespace BancoParaleloAPI.Entidades
@@ -15,6 +16,5 @@ namespace BancoParaleloAPI.Entidades
         public string? Username { get; set; }
         public string? Senha { get; set; }
         public Endereco? Endereco { get; set; }
-        public uint? TipoDeConta { get; set; }
     }
 }

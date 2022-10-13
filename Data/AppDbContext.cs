@@ -16,6 +16,9 @@ namespace BancoParaleloAPI.Data
         public DbSet<Cidade> Cidades { get; set; }
         public DbSet<Estado> Estados { get; set; }
         public DbSet<Pais> Paises { get; set; }
+        public DbSet<Conta> Contas { get; set; }
+        public DbSet<Agencia> Agencias { get; set; }
+        public DbSet<TipoDeConta> TiposDeConta { get; set; }
 
     }
 }

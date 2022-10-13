@@ -4,6 +4,7 @@ using BancoParaleloAPI.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BancoParaleloAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221009202525_updateConta")]
+    partial class updateConta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -30,15 +32,12 @@ namespace BancoParaleloAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<string>("Codigo")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Nome")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Agencias");
+                    b.ToTable("Agencia");
                 });
 
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Cidade", b =>
@@ -87,18 +86,13 @@ namespace BancoParaleloAPI.Migrations
                     b.Property<long?>("TipoId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UsuarioId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AgenciaId");
 
                     b.HasIndex("TipoId");
 
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Contas");
+                    b.ToTable("Conta");
                 });
 
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Endereco", b =>
@@ -219,7 +213,7 @@ namespace BancoParaleloAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TiposDeConta");
+                    b.ToTable("TipoDeConta");
                 });
 
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Transacao", b =>
@@ -252,6 +246,9 @@ namespace BancoParaleloAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
+                    b.Property<long?>("ContaId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Cpf")
                         .HasColumnType("nvarchar(max)");
 
@@ -278,6 +275,8 @@ namespace BancoParaleloAPI.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ContaId");
+
                     b.HasIndex("EnderecoId");
 
                     b.ToTable("Usuarios");
@@ -293,22 +292,22 @@ namespace BancoParaleloAPI.Migrations
                         .WithMany()
                         .HasForeignKey("TipoId");
 
-                    b.HasOne("BancoParaleloAPI.Entidades.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId");
-
                     b.Navigation("Agencia");
 
                     b.Navigation("Tipo");
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("BancoParaleloAPI.Entidades.Usuario", b =>
                 {
+                    b.HasOne("BancoParaleloAPI.Entidades.Conta", "Conta")
+                        .WithMany()
+                        .HasForeignKey("ContaId");
+
                     b.HasOne("BancoParaleloAPI.Entidades.Endereco", "Endereco")
                         .WithMany()
                         .HasForeignKey("EnderecoId");
+
+                    b.Navigation("Conta");
 
                     b.Navigation("Endereco");
                 });
