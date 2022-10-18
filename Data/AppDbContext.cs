@@ -1,9 +1,11 @@
 ﻿using BancoParaleloAPI.Entidades;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BancoParaleloAPI.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> opt) : base(opt)
         {
@@ -19,6 +21,5 @@ namespace BancoParaleloAPI.Data
         public DbSet<Conta> Contas { get; set; }
         public DbSet<Agencia> Agencias { get; set; }
         public DbSet<TipoDeConta> TiposDeConta { get; set; }
-
     }
 }

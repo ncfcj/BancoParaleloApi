@@ -1,11 +1,16 @@
 using BancoParaleloAPI.Data;
+using BancoParaleloAPI.Entidades;
+using BancoParaleloAPI.Hubs;
+using BancoParaleloAPI.Models;
 using BancoParaleloAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NuGet.Common;
+using System.Configuration;
 using System.Reflection.Metadata;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
@@ -18,6 +23,22 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 services.AddControllers();
 services.AddEndpointsApiExplorer();
+
+//Dependency injection
+services.AddScoped<EmailService>();
+services.AddScoped<UserService>();
+services.AddScoped<ConfirmarEmailHub>();
+
+//Db Context EntityFramework
+services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
+));
+
+//Identity 
+builder.Services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
+
 //Swagger
 services.AddSwaggerGen(c =>
 {
@@ -50,11 +71,6 @@ services.AddSwaggerGen(c =>
                 });
 });
 
-//Db Context EntityFramework
-services.AddDbContext<AppDbContext>(options => 
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")
-));
-
 //JWT
 services.AddAuthentication(opt => {
     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -74,6 +90,9 @@ services.AddAuthentication(opt => {
           };
       });
 
+//SignalR
+services.AddSignalR();
+
 #endregion
 
 #region App
@@ -82,11 +101,15 @@ var app = builder.Build();
 {
     // global cors policy
     app.UseCors(x => x
-        .AllowAnyOrigin()
+        .WithOrigins("http://localhost:4200")
         .AllowAnyMethod()
-        .AllowAnyHeader());
+        .AllowAnyHeader()
+        .AllowCredentials());
     app.MapControllers();
 }
+
+//SignalR
+app.MapHub<ConfirmarEmailHub>("/emailHub");
 
 //JWT
 app.UseAuthentication();

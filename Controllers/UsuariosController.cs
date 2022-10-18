@@ -10,6 +10,9 @@ using BancoParaleloAPI.Entidades;
 using Microsoft.AspNetCore.Authorization;
 using System.Text;
 using BancoParaleloAPI.Data.DTO.Usuario;
+using BancoParaleloAPI.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace BancoParaleloAPI.Controllers
 {
@@ -18,10 +21,12 @@ namespace BancoParaleloAPI.Controllers
     public class UsuariosController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly UserService _userService;
 
-        public UsuariosController(AppDbContext context)
+        public UsuariosController(AppDbContext context, UserService userService)
         {
             _context = context;
+            _userService = userService;
         }
 
         // GET: api/Usuarios
@@ -93,13 +98,25 @@ namespace BancoParaleloAPI.Controllers
 
                 if(users.Where(user => user.Cpf == usuarioDTO.cpf).ToList().Count > 0)
                 {
-                    throw new Exception("Cpf ja cadastrado");
+                    return BadRequest("Cpf ja cadastrado");
                 }
 
                 if(users.Where(user => user.Email == usuarioDTO.email).ToList().Count > 0)
                 {
-                    throw new Exception("Email ja cadastrado");
+                    return BadRequest("Email ja cadastrado");
                 }
+
+
+                var identityUser = new IdentityUser
+                {
+                    Email = usuarioDTO.email,
+                    UserName = usuarioDTO.email
+                };
+
+                var senha = WebEncoders.Base64UrlDecode(usuarioDTO.senha);
+                var SenhaDescriptografada = Encoding.UTF8.GetString(senha);
+
+                await _userService.CriarNovoUsuarioAsync(identityUser, SenhaDescriptografada);
 
                 Endereco endereco = usuarioDTO.endereco;
                 await _context.Enderecos.AddAsync(endereco);

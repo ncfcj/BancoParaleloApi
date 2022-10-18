@@ -16,5 +16,6 @@ namespace BancoParaleloAPI.Entidades
         public string? Username { get; set; }
         public string? Senha { get; set; }
         public Endereco? Endereco { get; set; }
+        public bool EmailConfirmado { get; set; }
     }
 }

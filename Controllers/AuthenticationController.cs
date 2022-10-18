@@ -49,7 +49,7 @@ namespace BancoParaleloAPI.Controllers
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
 
-                return Ok(new { Token = tokenString, StatusCode = 200, Usuario = usuario.FirstName });
+                return Ok(new { Token = tokenString, StatusCode = 200, Usuario = usuario.FirstName, EmailConfirmado = usuario.EmailConfirmado, Email = usuario.Email });
 
             }
             else
